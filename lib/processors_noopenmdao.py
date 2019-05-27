@@ -26,6 +26,8 @@ red_color = (100, 100, 255)
 
 class findFaceGetPulse(object):
 
+    bpm = None
+
     def __init__(self, fps=None, running_on_video=False):
         self.running_on_video = running_on_video
         self.fps = fps
@@ -162,6 +164,9 @@ class findFaceGetPulse(object):
             if self.no_face_counter > self.no_face_tolerance * self.fps:
                 print('no face reset')
                 self.clear_buffers()
+                f = open("data.txt", "w")
+                f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('no face reset','null', 'null','null', 'null'))
+                f.close()
 
             # otherwise - skip this frame but don't stop reset tracking just yet
         else:
@@ -171,6 +176,9 @@ class findFaceGetPulse(object):
             if self.current_face_out_of_range():
                 #if self.stable_face_counter:
                 print('out of range reset')
+                f = open("data.txt", "w")
+                f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('out of range reset', 'null', 'null', 'null', 'null'))
+                f.close()
                 self.clear_buffers()
             else:
                 # we've got a stable face
@@ -196,6 +204,8 @@ class findFaceGetPulse(object):
                     print("(BPM estimate: %0.1f bpm. fps: %d)" % (new_mean, self.fps))
                     self.results.append(new_mean)
                     self.bpm_buffer = []
+
+
 
             self.draw_face_rect()
 
@@ -273,6 +283,7 @@ class findFaceGetPulse(object):
         return out_of_range
 
     def track_rate(self):
+
         forehead1 = self.get_subface_coord(0.5, 0.18, 0.25, 0.15)
         self.draw_rect(forehead1)
 
@@ -350,6 +361,22 @@ class findFaceGetPulse(object):
                 self.bpm = bpm_estimate
 
             tsize = 1
+
+
+
+            f = open("data.txt", "w")
+            f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('stabilized', str(bpm_estimate), str([x1,y1,w1,h1]),str(forehead1),str(self.fps)))
+            f.close()
+            '''
+            print('stabilized')  # StatusOfWork
+            print(bpm_estimate)# heartrate
+            print(x1,y1,w1,h1)# head pos
+            print(forehead1)#forehead pos
+            print(str(self.fps) + ' fps')#fps
+            '''
+
+
+
             cv2.putText(self.frame_out, text,
                        (int(x - w / 2), int(y)), cv2.FONT_HERSHEY_PLAIN, tsize, default_color)
 
