@@ -18,8 +18,8 @@ Program should serve similar json on assigned endpoint.
 ### heart_rate
 	Beats of heart per minute
 ### head_positions
-	Position of head [x, y, w, h 
+	Position of head [x, y, w, h]
 ### forehead_position:
-	Position of forehead [x, y, w, h 
+	Position of forehead [x, y, w, h] 
 ### fps 
   frame per second
