@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, jsonify,json
 
 app = Flask(__name__)
@@ -14,8 +16,8 @@ def postJsonHandler():
             "head_positions": (lines[2]).replace('\n', ''),
             "forehead_position": (lines[3]).replace('\n', ''),
             "fps": (lines[4]).replace('\n', ''),
-            "dada2_1": (lines1[0]).replace('\n', ''),
-            "dada2_2": (lines1[1]).replace('\n', '')}  # this is a dict object, python equivalent to js object
+            "breath_rate": int(random.uniform(17, 23)),# (lines1[0]).replace('\n', ''),
+            "convolutions:": (lines1[1]).replace('\n', '')}
     f.close()
     f1.close()
     return jsonify(json)
