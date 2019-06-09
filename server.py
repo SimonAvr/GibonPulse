@@ -10,10 +10,13 @@ j = 0
 def postJsonHandler():
     global j
     global tmp
-    with open('face.jpg', "rb") as imageFile:
-        strimage = base64.b64encode(imageFile.read())
-        with open("data.txt", "a") as f:
-            f.write(str(strimage) + "\n")
+    try:
+        with open('face.jpg', "rb") as imageFile:
+            strimage = base64.b64encode(imageFile.read())
+            with open("data.txt", "a") as f:
+                f.write(str(strimage) + "\n")
+    except:
+        strimage = 'null'
 
     f = open('data.txt', "r")
     f1  =open('data2.txt',"r")
