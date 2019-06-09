@@ -1,3 +1,5 @@
+import base64
+
 import numpy as np
 import pandas as pd
 import time
@@ -25,7 +27,6 @@ red_color = (100, 100, 255)
 
 
 class findFaceGetPulse(object):
-
     bpm = None
 
     def __init__(self, fps=None, running_on_video=False):
@@ -44,7 +45,7 @@ class findFaceGetPulse(object):
 
         self.last_face_rects = pd.DataFrame(columns=['x', 'y', 'h', 'w'])
         self.fixed_face = None
-        
+
         # restart tracking if face can't be detected for 0.5 seconds
         self.no_face_tolerance = 0.5
         self.no_face_counter = 0
@@ -165,7 +166,7 @@ class findFaceGetPulse(object):
                 print('no face reset')
                 self.clear_buffers()
                 f = open("data.txt", "w")
-                f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('no face reset','null', 'null','null', 'null'))
+                f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('no face reset', 'null', 'null', 'null', 'null'))
                 f.close()
 
             # otherwise - skip this frame but don't stop reset tracking just yet
@@ -174,12 +175,13 @@ class findFaceGetPulse(object):
 
             # if face is out of range - clear buffers and stop tracking
             if self.current_face_out_of_range():
-                #if self.stable_face_counter:
+                # if self.stable_face_counter:
                 print('out of range reset')
                 f = open("data.txt", "w")
                 f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('out of range reset', 'null', 'null', 'null', 'null'))
                 f.close()
                 self.clear_buffers()
+
             else:
                 # we've got a stable face
                 if not self.tracking_running:
@@ -205,23 +207,17 @@ class findFaceGetPulse(object):
                     self.results.append(new_mean)
                     self.bpm_buffer = []
 
-
-
             self.draw_face_rect()
-
-
-
-
 
     def print_tracking_menu(self, cam):
 
         cv2.putText(
             self.frame_out, "Press 'S' to restart",
-                   (10, 25), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
+            (10, 25), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
         cv2.putText(self.frame_out, "Press 'D' to toggle data plot",
-                   (10, 50), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
+                    (10, 50), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
         cv2.putText(self.frame_out, "Press 'Esc' to quit",
-                   (10, 75), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
+                    (10, 75), cv2.FONT_HERSHEY_PLAIN, 1.5, default_color)
 
     def clear_buffers(self):
         self.data_buffer, self.times = [], []
@@ -261,7 +257,7 @@ class findFaceGetPulse(object):
 
     def current_face_out_of_range(self):
         out_of_range = False
-        
+
         # take current face rectangle
         x, y, w, h = self.face_rect
         face_dict = {'x': x, 'y': y, 'h': h, 'w': w}
@@ -277,9 +273,9 @@ class findFaceGetPulse(object):
         if self.fixed_face is None or not self.is_face_close(face_candidate, self.fixed_face):
             out_of_range = True
             self.fixed_face = face_candidate
-            
+
         self.face_rect = self.face_dict_to_rect(self.fixed_face)
-        
+
         return out_of_range
 
     def track_rate(self):
@@ -361,12 +357,14 @@ class findFaceGetPulse(object):
                 self.bpm = bpm_estimate
 
             tsize = 1
-
-
-
             f = open("data.txt", "w")
-            f.writelines('{}\n{}\n{}\n{}\n{}\n'.format('stabilized', str(bpm_estimate), str([x1,y1,w1,h1]),str(forehead1),str(self.fps)))
+            f.writelines(
+                '{}\n{}\n{}\n{}\n{}\n'.format('stabilized', str(round(bpm_estimate,2)), str([x1, y1, w1, h1]), str(forehead1),
+                                              str(round(self.fps,2))))
             f.close()
+
+
+
             '''
             print('stabilized')  # StatusOfWork
             print(bpm_estimate)# heartrate
@@ -375,10 +373,8 @@ class findFaceGetPulse(object):
             print(str(self.fps) + ' fps')#fps
             '''
 
-
-
             cv2.putText(self.frame_out, text,
-                       (int(x - w / 2), int(y)), cv2.FONT_HERSHEY_PLAIN, tsize, default_color)
+                        (int(x - w / 2), int(y)), cv2.FONT_HERSHEY_PLAIN, tsize, default_color)
 
     def calculate_fps(self):
         if self.fps:

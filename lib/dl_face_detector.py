@@ -1,4 +1,4 @@
-#Face detection https://www.pyimagesearch.com/2018/02/26/face-detection-with-opencv-and-deep-learning/
+# Face detection https://www.pyimagesearch.com/2018/02/26/face-detection-with-opencv-and-deep-learning/
 
 import numpy as np
 import cv2
@@ -13,6 +13,7 @@ model_path = './dl_face_detection/res10_300x300_ssd_iter_140000.caffemodel'
 
 # load our serialized model from disk
 net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
+
 
 # using deep learning model to detect the face
 

@@ -1,4 +1,3 @@
-import base64
 import random
 
 from flask import Flask, jsonify,json
@@ -10,27 +9,16 @@ j = 0
 def postJsonHandler():
     global j
     global tmp
-    with open('face.jpg', "rb") as imageFile:
-        strimage = base64.b64encode(imageFile.read())
-        with open("data.txt", "a") as f:
-            f.write(str(strimage) + "\n")
-
     f = open('data.txt', "r")
     f1  =open('data2.txt',"r")
     lines = f.readlines()
     lines1 = f1.readlines()
-
-    try:
-        gotdata = lines[5]
-    except IndexError:
-        gotdata = 'null'
-
     json = {"status": (lines[0]).replace('\n', ''),
             "heart_rate": (lines[1]).replace('\n', ''),
             "head_positions": (lines[2]).replace('\n', ''),
             "forehead_position": (lines[3]).replace('\n', ''),
             "fps": (lines[4]).replace('\n', ''),
-            "ImgBase64": (gotdata),
+            "ImgBase64": (lines[5]),
             "breath_rate": int(random.uniform(17, 23)),# (lines1[0]).replace('\n', ''),
             "convolutions:": (lines1[1]).replace('\n', ''),
             "breath": str(tmp[j:j+120])}

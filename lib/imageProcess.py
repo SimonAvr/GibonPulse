@@ -10,7 +10,6 @@ Whole-frame image processing components & helper methods
 
 
 class RGBSplit(Component):
-
     """
     Extract the red, green, and blue channels from an (n,m,3) shaped
     array representing a single image frame with RGB color coding.
@@ -33,7 +32,6 @@ class RGBSplit(Component):
 
 
 class RGBmuxer(Component):
-
     """
     Take three (m,n) matrices of equal size and combine them into a single
     RGB-coded color frame.
@@ -53,7 +51,6 @@ class RGBmuxer(Component):
 
 
 class CVwrapped(Component):
-
     """
     Generic wrapper to take the simpler functions from the cv2 or scipy image
     libraries to generate connectable openMDAO components for image processing.
@@ -75,7 +72,6 @@ class CVwrapped(Component):
 
 
 class Grayscale(CVwrapped):
-
     """
     Turn (m,n,3) shaped RGB image frame to a (m,n) frame
     Discards color information to produce simple image matrix.
@@ -86,7 +82,6 @@ class Grayscale(CVwrapped):
 
 
 class equalizeContrast(CVwrapped):
-
     """
     Automatic contrast correction.
     Note: Only works for grayscale images!
@@ -97,7 +92,6 @@ class equalizeContrast(CVwrapped):
 
 
 class showBPMtext(Component):
-
     """
     Shows the estimated BPM in the image frame
     """
